@@ -26,9 +26,9 @@ class Reading:
         self.adc = adc
 
     def adc_to_voltage(self, adc):
-        """
-        Convert ADC counts to a physical voltage 
-        """
+        
+        #Convert ADC counts to a physical voltage 
+        
         return 1.653 * adc * 0.456
 
     def __str__(self):
