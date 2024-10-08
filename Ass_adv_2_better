@@ -1,9 +1,26 @@
+from dataclasses import dataclass
+from loguru import logger
 
-
+"""
+Aggiunta di un decoratore.
+Ci arriviamo perchè notiamo che self
+non compare da nessuna parte dentro le funzioni
+"""
+@dataclass
 class Reading:
     """
     Small container class representing a single voltage reading.
     """
+
+    timestamp: float
+    adc: int
+
+    def voltage(self):
+        """
+        Convert ADC counts to a physical voltage 
+        """
+        return 1.653 * adc * 0.456
+"""
     def __init__(self, timestamp, adc):
         self.timestamp = timestamp
         self.adc = adc
@@ -16,7 +33,7 @@ class Reading:
 
     def __str__(self):
         return f'Reading at {self.timestamp} s: {self.adc} ADC counts ({self.voltage()} V)'
-
+"""
 
 class Voltagedata:
     """
