@@ -1,1 +1,30 @@
+""" Goal: write a Python program able to print the relative frequence of each letter
+of the alphabet (without distinguishing between lower and upper case) in a book. """
+
+import argparse
+
+
+def get_file():
+    # Get file from the command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("A_study_in_scarlet", help="Function to get the file path",
+                         type=str)
+    args = parser.parse_args()  # analyzes arguments
+
+    # Open file in 'read' mode
+    with open(args.A_study_in_scarlet, 'r') as book:
+        content = book.read()
+        return content
+
+
+# Print the frequence of each letter of the alphabet in the book
+def occurrences():
+    """ Explanation of the function """
+    return
+
+
+# Get the explanation of the 'occurences' function through 'help' command
+print('Using help:')
+help(occurrences)
+
 
