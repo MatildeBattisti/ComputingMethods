@@ -2,24 +2,24 @@
 of the alphabet (without distinguishing between lower and upper case) in a book. """
 
 import argparse
+import os
 from collections import Counter
 
 
 def get_file():
     # Get file from the command line
     parser = argparse.ArgumentParser()
-    parser.add_argument("A_study_in_scarlet", help="Function to get the file path",
-                         type=str)
+    parser.add_argument("filepath", help="Path to the book file", type=str)
     args = parser.parse_args()  # analyzes arguments
 
     # Open file in 'read' mode
-    with open(args.A_study_in_scarlet, 'r') as book:
-        content = book.read()
-        return content
+    with open(args.filepath, 'r', encoding='utf-8') as book:
+        #content = book.read()
+        return book.read()
 
 
 # Print the frequence of each letter of the alphabet in the book
-def occurrences():
+def occurrences(content):
     """
     Uses a list comprehension:
     -> iterates on every character in the book (content) and selects only the letters from the alphabet;
@@ -29,23 +29,22 @@ def occurrences():
     -> 'Counter' counts how many times the letter is read in the list 'letters';
     -> 'dict' coverts counter in a proper dictionary.
     """
-    content = get_file()
     letters = [char.lower() for char in content if char.isalpha()]
     return dict(Counter(letters))
 
 
 # Get the explanation of the 'occurences' function through 'help' command
-print('Using help:')
-help(occurrences)
+#print('Using help:')
+#help(occurrences)
 
 
 def main():
     content = get_file()
-    occurrences = occurrences(content)
+    letters_frequency = occurrences(content)
 
     print('Letters frequency:')
-    for letter, occurrence in sorted(occurrences.item()):
-        print(f'{letter} : {occurrences}')
+    for letter, occurrence in sorted(letters_frequency.items()):
+        print(f'{letter} : {occurrence}')
 
 
 if __name__ == '__main__':
