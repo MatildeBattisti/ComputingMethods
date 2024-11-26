@@ -4,6 +4,8 @@ of the alphabet (without distinguishing between lower and upper case) in a book.
 import argparse
 import os
 from collections import Counter
+import time
+import matplotlib.pyplot as plt
 
 
 def get_file():
@@ -32,18 +34,32 @@ def occurrences(content):
     return dict(Counter(letters))
 
 
-# Get the explanation of the 'occurences' function through 'help' command
-#print('Using help:')
-#help(occurrences)
+def histogram(letters_frequency):
+    letters = sorted(letters_frequency.keys())
+    frequencies = [letters_frequency[letter] for letter in letters]
+
+    plt.bar(letters, frequencies, color='cornflowerblue', edgecolor='blue')
+    plt.title('Letters occurrence inside the book')
+    plt.xlabel('Letters')
+    plt.ylabel('Frequencies')
+    plt.show()
 
 
 def main():
+    start_time = time.time()
     content = get_file()
     letters_frequency = occurrences(content)
 
     print('Letters frequency:')
     for letter, occurrence in sorted(letters_frequency.items()):
         print(f'{letter} : {occurrence}')
+
+    # Total elapsed time
+    total_time = time.time() - start_time
+    print(f'Total elapsed time: {total_time} seconds')
+
+    # Print histogram
+    histogram(letters_frequency)
 
 
 if __name__ == '__main__':
