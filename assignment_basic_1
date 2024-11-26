@@ -14,7 +14,6 @@ def get_file():
 
     # Open file in 'read' mode
     with open(args.filepath, 'r', encoding='utf-8') as book:
-        #content = book.read()
         return book.read()
 
 
