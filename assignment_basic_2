@@ -1,1 +1,33 @@
+""" Goal: write a program to explore the properties of a few elementary Particles.
+The program must contain a Base class Particle and two Child classes, Proton and Alpha, that inherit from it. """
+
+class Particle:
+    def __init__(self, mass, charge, name, energy=0., momentum=0., beta=0., gamma=0.):
+        self.mass = float(mass)
+        self.charge = float(charge)
+        self.name = str(name)
+
+    def energy(self, energy=0.):
+        self.energy = float(energy)
+
+    def momentum(self, momentum=0.):
+        self.momentum = float(momentum)
+
+    def beta(self, beta=0.):
+        self.beta = float(beta)
+
+    def gamma(self, gamma=0.):
+        self.gamma = float(gamma)
+
+
+class Proton:
+
+
+class Alpha:
+
+
+
+
+
+
 
