@@ -1,33 +1,107 @@
 """ Goal: write a program to explore the properties of a few elementary Particles.
 The program must contain a Base class Particle and two Child classes, Proton and Alpha, that inherit from it. """
 
+import numpy as np
+
 class Particle:
-    def __init__(self, mass, charge, name, energy=0., momentum=0., beta=0., gamma=0.):
+    # Instances of the class Particle must be initialized with their mass, charge, and name
+    def __init__(self, name, mass, charge, **kwargs):
+        """
+        Class Particle instances are the following parameters:
+        param name: name of particle
+        param mass: mass of particle
+        param charge: charge of particle
+        param kwargs: optional argument for energy, momentum, beta or gamma        
+        """
+        self.name = str(name)
         self.mass = float(mass)
         self.charge = float(charge)
-        self.name = str(name)
 
-    def energy(self, energy=0.):
-        self.energy = float(energy)
+        # The class constructor must also accept (optionally) and store one and only one of the following quantities: energy, momentum, beta or gamma
+        if len(kwargs) > 1:
+            raise ValueError('Only one optional argument should be set')
+    
+        self.energy = kwargs.get('energy', 0.)
+        self.momentum = kwargs.get('momentum', 0.)
+        self.beta = kwargs.get('beta', 0.)
+        self.gamma = kwargs.get('gamma', 0.)
 
-    def momentum(self, momentum=0.):
-        self.momentum = float(momentum)
+        self.validate_and_calculate()
 
-    def beta(self, beta=0.):
-        self.beta = float(beta)
+    # Whatever the choice, the user should be able to read and set any of the above mentioned quantities using just the '.' (dot) operator
+    # Attempts to set non physical values should be rejected
+    def validate_and_calculate(self):
+        c = 3e8  # light speed [m/s]
 
-    def gamma(self, gamma=0.):
-        self.gamma = float(gamma)
+        if self.energy != 0.:
+            self.gamma = self.energy / (self.mass * c**2)
+            if self.beta > 1.:
+                self.beta = np.sqrt(1 - 1/self.gamma**2)
+            else:
+                raise ValueError('Speed cannot exceed c')
+            self.momentum = self.beta * self.gamma * self.mass*c
+
+        elif self.momentum != 0.:
+            self.energy = np.sqrt((self.mass * c**2)**2 - (c * self.momentum)**2)
+            self.gamma = self.energy / (self.mass * c**2)
+            if self.beta > 1.:
+                self.beta = np.sqrt(1 - 1/self.gamma**2)
+            else:
+                raise ValueError('Speed cannot exceed c')
+
+        elif self.beta != 0. and self.beta >1.:
+            self.gamma = np.sqrt(1/(1 - self.beta**2))
+            self.energy = self.gamma * self.mass * c**2
+            self.momentum = self.beta * self.gamma * self.mass * c
+
+        elif self.gamma != 0.:
+            if self.beta > 1.:
+                self.beta = np.sqrt(1 - 1/self.gamma**2)
+            else:
+                raise ValueError('Speed cannot exceed c')
+            self.momentum = self.beta * self.gamma * self.mass * c
+            self.energy = self.gamma * self.mass * c**2
 
 
-class Proton:
+    # The Particle class must have a method to print the Particle information in a formatted way
+    def __str__(self):
+        """
+        Information of Particle class
+        """
+        return(
+            f'Name: {self.name} \n'
+            f'Mass: {self.mass} kg \n'
+            f'Charge: {self.charge} C \n'
+            f'Energy: {self.energy} J \n'
+            f'Momentum: {self.momentum} Js/m \n'
+            f'Beta: {self.beta} \n'
+            f'Gamma: {self.gamma} \n'
+        )
+    
+
+# The child classes Alpha and Protons must use class attributes to store their mass, charge and name
+class Proton(Particle):
+    def __init__(self, **kwargs):
+        Particle.__init__(self, name = Proton, mass = 1.67262192e-27, charge = 1.602176634e-19, **kwargs)
 
 
-class Alpha:
+class Alpha(Particle):
+    def __init__(self, **kwargs):
+        Particle.__init__(self, name = Alpha, mass = 6.6446573450e-27, charge = 2*1.602176634e-19, **kwargs)
 
 
+# Trying some outputs
+if __name__ == '__main__':
+    # This works
+    proton = Proton(energy = 1e10)
+    print (proton)
 
+    # This should raise the ValueError -> cannot accept more than 1 argument
+    alpha_particle = Alpha(energy = 1e-10, momentum = 1)
+    print(alpha_particle)
 
-
+    # This should raise ValueError -> spped cannot exced c
+    proton1 = Proton(beta = 2)
+    print(proton1)
 
 
