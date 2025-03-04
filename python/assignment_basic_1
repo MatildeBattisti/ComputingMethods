@@ -1,0 +1,69 @@
+""" Goal: write a Python program able to print the relative frequence of each letter
+of the alphabet (without distinguishing between lower and upper case) in a book. """
+
+import argparse
+import os
+from collections import Counter
+import time
+import matplotlib.pyplot as plt
+
+
+def get_file():
+    # Get file from the command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filepath", help="Path to the book file", type=str)
+    args = parser.parse_args()  # analyzes arguments
+
+    # Open file in 'read' mode
+    with open(args.filepath, 'r', encoding='utf-8') as book:
+        return book.read()
+
+
+# Print the frequence of each letter of the alphabet in the book
+def occurrences(content):
+    """
+    Uses a list comprehension:
+    -> iterates on every character in the book (content) and selects only the letters from the alphabet;
+    -> all the letters are re-wrote in lower case.
+    
+    Uses the object Counter as subclass of a dictionary:
+    -> 'Counter' counts how many times the letter is read in the list 'letters';
+    -> 'dict' coverts counter in a proper dictionary.
+    """
+    letters = [char.lower() for char in content if char.isalpha()]
+    return dict(Counter(letters))
+
+
+def histogram(letters_frequency):
+    letters = sorted(letters_frequency.keys())
+    frequencies = [letters_frequency[letter] for letter in letters]
+
+    plt.bar(letters, frequencies, color='cornflowerblue', edgecolor='blue')
+    plt.title('Letters occurrence inside the book')
+    plt.xlabel('Letters')
+    plt.ylabel('Frequencies')
+    plt.show()
+
+
+def main():
+    start_time = time.time()
+    content = get_file()
+    letters_frequency = occurrences(content)
+
+    print('Letters frequency:')
+    for letter, occurrence in sorted(letters_frequency.items()):
+        print(f'{letter} : {occurrence}')
+
+    # Total elapsed time
+    total_time = time.time() - start_time
+    print(f'Total elapsed time: {total_time} seconds')
+
+    # Print histogram
+    histogram(letters_frequency)
+
+
+if __name__ == '__main__':
+    main()
+
+
+
